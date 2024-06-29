@@ -19,15 +19,27 @@ func Extract(directories []string, fileExtensions []string, prefix string) {
 	breakpoints := Breakpoints()
 	breakpointNames := make([]string, len(breakpoints))
 	for i, breakpoint := range breakpoints {
-		breakpointNames[i] = fmt.Sprintf("%s:", breakpoint.name)
+		breakpointNames[i] = breakpoint.name
 	}
 
-	fileRegex, e := regexp.Compile(fmt.Sprintf("%s$", strings.Join(fileExtensions, "|")))
+	states := States()
+	stateNames := make([]string, len(states))
+	for i, state := range states {
+		stateNames[i] = state.name
+	}
+
+	styles := Styles()
+	stylePatterns := make([]string, len(styles))
+	for i, style := range styles {
+		stylePatterns[i] = style.name.String()
+	}
+
+	fileRegex, e := regexp.Compile(fmt.Sprintf(".(%s)$", strings.Join(fileExtensions, "|")))
 	if e != nil {
 		log.Fatal(e)
 	}
 
-	styleRegex, e := regexp.Compile(fmt.Sprintf("(%s)", strings.Join(breakpointNames, "|")))
+	styleRegex, e := regexp.Compile(fmt.Sprintf("((%s):)*((%s):)*(%s)", strings.Join(breakpointNames, "|"), strings.Join(stateNames, "|"), strings.Join(stylePatterns, "|")))
 
 	fmt.Println("File regex: ", fileRegex)
 	fmt.Println("Style regex: ", styleRegex)
@@ -66,6 +78,7 @@ func extractFile(filePath string, regex *regexp.Regexp) []string {
 	for _, res := range regexResult {
 		if !slices.Contains(result, res) {
 			result = append(result, res)
+			fmt.Println("Added:", res)
 		}
 	}
 

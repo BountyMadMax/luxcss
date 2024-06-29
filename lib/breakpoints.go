@@ -8,10 +8,10 @@ type Breakpoint struct {
 
 func Breakpoints() [5]Breakpoint {
 	return [5]Breakpoint{
-		Breakpoint{"sm", "640px", "sm"},
-		Breakpoint{"md", "768px", "md"},
-		Breakpoint{"lg", "1024px", "lg"},
-		Breakpoint{"xl", "1280px", "xl"},
-		Breakpoint{"2xl", "1536px", "\\32xl"},
+		{"sm", "640px", "sm"},
+		{"md", "768px", "md"},
+		{"lg", "1024px", "lg"},
+		{"xl", "1280px", "xl"},
+		{"2xl", "1536px", "\\32xl"},
 	}
 }

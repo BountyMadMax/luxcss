@@ -1,7 +1,5 @@
 package main
 
-//import "luxcss/cmd"
-
 import (
 	"fmt"
 	"github.com/urfave/cli/v2"

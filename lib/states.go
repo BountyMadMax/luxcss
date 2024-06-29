@@ -1,12 +1,14 @@
 package lib
 
 type State struct {
-	name     string
-	function func(value string) string
+	name         string
+	apply        func(value string) string
+	exscapedName string
 }
 
 func States() []State {
 	return []State{
-		State{"hover", func(value string) string { return "test-state" }},
+		{"hover", func(value string) string { return "test-hover" }, "hover"},
+		{"focus", func(value string) string { return "test-focus" }, "focus"},
 	}
 }
