@@ -4,10 +4,6 @@ import (
 	"fmt"
 )
 
-func WrapWithBreakpoint(content []string, breakpoint Breakpoint) []string {
-	wrapped := make([]string, len(content)+2)
-	wrapped = append(wrapped, fmt.Sprintf("@media (min-width: %d) {", breakpoint.value))
-	wrapped = append(wrapped, content...)
-	wrapped = append(wrapped, "}")
-	return wrapped
+func ApplyBreakpoint(breakpoint Breakpoint) (string, string, int) {
+	return fmt.Sprintf("@media (min-width: %s) {", breakpoint.value), breakpoint.class, 1
 }

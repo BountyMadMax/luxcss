@@ -31,7 +31,7 @@ func Extract(directories []string, fileExtensions []string, prefix string) {
 	styles := Styles()
 	stylePatterns := make([]string, len(styles))
 	for i, style := range styles {
-		stylePatterns[i] = style.name.String()
+		stylePatterns[i] = style.name
 	}
 
 	fileRegex, e := regexp.Compile(fmt.Sprintf(".(%s)$", strings.Join(fileExtensions, "|")))
