@@ -31,7 +31,11 @@ func Extract(directories []string, fileExtensions []string, prefix string) {
 	styles := Styles()
 	stylePatterns := make([]string, len(styles))
 	for i, style := range styles {
-		stylePatterns[i] = style.name
+		options := strings.Join(style.options, "|")
+		if style.customStyles {
+			options = strings.Join([]string{"\\[[[:digit:]]*(px|rem|em|%|vh|vw|vmax|vmin|vb|vi|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pc|pt)\\]", options}, "|")
+		}
+		stylePatterns[i] = fmt.Sprintf("%s(%s)", style.prefix, options)
 	}
 
 	fileRegex, e := regexp.Compile(fmt.Sprintf(".(%s)$", strings.Join(fileExtensions, "|")))
