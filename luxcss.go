@@ -76,8 +76,6 @@ func main() {
 			},
 		},
 		Action: func(cCtx *cli.Context) error {
-			fmt.Println("Hello world")
-
 			fmt.Println("watch: ", watch)
 			fmt.Println("prefix: ", prefix)
 			fmt.Println("output: ", output)
