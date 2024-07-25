@@ -13,8 +13,7 @@ type Style struct {
 }
 
 func Styles() []Style {
-	styles := make([]Style, 5)
-	styles = []Style{
+	return []Style{
 		{
 			"w-",
 			[]string{"[[:digit:]]"},
@@ -87,6 +86,4 @@ func Styles() []Style {
 			true,
 		},
 	}
-
-	return styles
 }
