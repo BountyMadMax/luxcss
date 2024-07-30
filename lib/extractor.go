@@ -43,7 +43,7 @@ func Extract(directories []string, fileExtensions []string, prefix string) {
 		log.Fatal(e)
 	}
 
-	styleRegex, e := regexp.Compile(fmt.Sprintf("((%s):)*((%s):)*(%s)", strings.Join(breakpointNames, "|"), strings.Join(stateNames, "|"), strings.Join(stylePatterns, "|")))
+	styleRegex, e := regexp.Compile(fmt.Sprintf("((%s):)*((%s):)*(%s(%s))", strings.Join(breakpointNames, "|"), strings.Join(stateNames, "|"), prefix, strings.Join(stylePatterns, "|")))
 
 	fmt.Println("File regex: ", fileRegex)
 	fmt.Println("Style regex: ", styleRegex)
