@@ -50,17 +50,30 @@ func Extract(directories []string, fileExtensions []string, prefix string) {
 	fmt.Println("Regex groups: ", styleRegex.SubexpNames())
 
 	fmt.Println("---------")
+
+	var results []string
+
 	for _, dir := range directories {
-		extractDir(dir, fileRegex, styleRegex)
+		results = extractDir(dir, fileRegex, styleRegex)
 	}
+
+	fmt.Println("Results: ", results)
 }
 
-func extractDir(dir string, fileRegex *regexp.Regexp, styleRegex *regexp.Regexp) {
+func extractDir(dir string, fileRegex *regexp.Regexp, styleRegex *regexp.Regexp) []string {
+	results := make([]string, 0)
 	e := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err == nil && fileRegex.MatchString(info.Name()) {
 			println(info.Name())
 
-			extractFile(path, styleRegex)
+			fileResult := extractFile(path, styleRegex)
+
+			for _, res := range fileResult {
+				if !slices.Contains(results, res) {
+					results = append(results, res)
+				}
+
+			}
 		}
 		return nil
 	})
@@ -68,6 +81,8 @@ func extractDir(dir string, fileRegex *regexp.Regexp, styleRegex *regexp.Regexp)
 	if e != nil {
 		log.Fatal(e)
 	}
+
+	return results
 }
 
 func extractFile(filePath string, regex *regexp.Regexp) []string {
