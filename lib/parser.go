@@ -3,6 +3,8 @@ package lib
 import (
 	"log"
 	"os"
+	"slices"
+	"strings"
 )
 
 type Writer interface {
@@ -73,4 +75,26 @@ func (m *MediaTree) writeFile(file *os.File) error {
 	}
 
 	return err
+}
+
+func Parse(classes []string) ([]ExtractClass, map[string]*MediaTree) {
+	var extractClasses []ExtractClass
+	var mediaTrees map[string]*MediaTree
+
+	for _, class := range classes {
+		// First element could be a breakpoint.
+		// After that, an unknown amount of states could be.
+		// At the end is the name with the value.
+		splitted := strings.Split(class, ":")
+
+		if slices.Contains([]string{"sm", "md", "lg", "xl", "2xl"}, splitted[0]) {
+			if mediaTrees[splitted[0]] == nil {
+				// Create mediaTree
+			} else {
+				// Add to mediaTree
+			}
+		}
+	}
+
+	return extractClasses, mediaTrees
 }
