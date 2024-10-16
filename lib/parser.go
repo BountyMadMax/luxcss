@@ -41,6 +41,9 @@ type MediaValue struct {
 }
 
 func Parse(classes []string) ([]*ExtractClass, map[string]MediaTree) {
+	// TODO: This implementation currently expects that the given classes only have one breakpoint.
+	// But the best thing would be for them to be unchanged, since we need the full extracted class for later.
+
 	var extractClasses []*ExtractClass
 	var mediaTrees map[string]*MediaTree
 
