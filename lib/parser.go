@@ -1,9 +1,7 @@
 package lib
 
 import (
-	"log"
 	"os"
-	"slices"
 	"strings"
 )
 
@@ -12,73 +10,38 @@ type Writer interface {
 }
 
 type ExtractClass struct {
-	id          string
-	class       string
-	classValues []string
-	states      []func(string) string
-	style       func(*os.File, []string) error
+	// Class as extracted.
+	class string
+	// Values of the class as property => value. Should mostly only be one.
+	values map[string]string
+	// States applied to the class.
+	states []StyleState
 }
 
-func (e *ExtractClass) writeFile(file *os.File) error {
-	for _, state := range e.states {
-		e.class = state(e.class)
-	}
-
-	_, err := file.WriteString(e.class + "{")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = e.style(file, e.classValues)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	_, err = file.WriteString("}")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return err
+type StyleState struct {
+	prefix *string
+	suffix *string
 }
 
 type MediaTree struct {
-	classes     []*ExtractClass
-	mediaValues []string
-	media       func(*os.File, []string) error
-	parent      *MediaTree
-	child       *MediaTree
+	// Classes contained in the media query.
+	classes []*ExtractClass
+	// Values of the media.
+	mediaValues []MediaValue
+	// Parent if exists.
+	parent *MediaTree
+	// Childs if multiple media queries are used.
+	// Example: breakpoint query -> print query
+	childs []*MediaTree
 }
 
-func (m *MediaTree) writeFile(file *os.File) error {
-	err := m.media(file, m.mediaValues)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, class := range m.classes {
-		err = class.writeFile(file)
-	}
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	_, err = file.WriteString("}")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return err
+type MediaValue struct {
+	key   *string
+	value string
 }
 
-func Parse(classes []string) ([]ExtractClass, map[string]*MediaTree) {
-	var extractClasses []ExtractClass
+func Parse(classes []string) ([]*ExtractClass, map[string]MediaTree) {
+	var extractClasses []*ExtractClass
 	var mediaTrees map[string]*MediaTree
 
 	for _, class := range classes {
@@ -87,14 +50,36 @@ func Parse(classes []string) ([]ExtractClass, map[string]*MediaTree) {
 		// At the end is the name with the value.
 		splitted := strings.Split(class, ":")
 
-		if slices.Contains([]string{"sm", "md", "lg", "xl", "2xl"}, splitted[0]) {
-			if mediaTrees[splitted[0]] == nil {
-				// Create mediaTree
-			} else {
-				// Add to mediaTree
-			}
-		}
+		id, mediaTree, mediaTrees := applyBreakpoint(mediaTrees, splitted)
+
+		id, mediaTree, extractClass := applyState()
 	}
 
 	return extractClasses, mediaTrees
+}
+
+func applyBreakpoint(mediaTrees map[string]*MediaTree, splitted []string) (int, *MediaTree, map[string]*MediaTree) {
+	for _, breakpoint := range Breakpoints() {
+		if breakpoint.name == splitted[0] {
+			if mediaTrees[splitted[0]] == nil {
+				mediaTrees[splitted[0]] = buildMediaTree()
+			}
+
+			return 1, mediaTrees[splitted[0]], mediaTrees
+		}
+	}
+
+	return 0, nil, mediaTrees
+}
+
+func applyStates(mediaTree *MediaTree, splitted []string) (int, *MediaTree, ExtractClass) {
+
+}
+
+func buildMediaTree() *MediaTree {
+
+}
+
+func buildStyle() *ExtractClass {
+
 }

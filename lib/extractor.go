@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Extract(directories []string, fileExtensions []string, prefix string) {
+func Extract(directories []string, fileExtensions []string, prefix string) []string {
 	fmt.Println("--- Start extracting ---")
 	fmt.Println("Prefix: ", prefix)
 	fmt.Println("Directories: ", directories)
@@ -58,6 +58,8 @@ func Extract(directories []string, fileExtensions []string, prefix string) {
 	}
 
 	fmt.Println("Results: ", results)
+
+	return results
 }
 
 func extractDir(dir string, fileRegex *regexp.Regexp, styleRegex *regexp.Regexp) []string {

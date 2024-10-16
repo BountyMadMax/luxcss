@@ -63,7 +63,11 @@ func main() {
 			fmt.Println("include: ", include)
 			fmt.Println("extensions: ", extensions)
 
-			lib.Extract(include.Value(), extensions.Value(), prefix)
+			lib.Parse(lib.Extract(include.Value(), extensions.Value(), prefix))
+
+			// TODO: Create or open output file.
+
+			// Write to file.
 
 			return nil
 		},
